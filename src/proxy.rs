@@ -5,6 +5,7 @@ use std::sync::Arc;
 
 use crate::into_url::{IntoUrl, IntoUrlSealed};
 use crate::Url;
+use base64::Engine;
 use http::{header::HeaderValue, Uri};
 use ipnet::IpNet;
 use once_cell::sync::Lazy;
@@ -727,9 +728,12 @@ impl fmt::Debug for Custom {
 
 pub(crate) fn encode_basic_auth(username: &str, password: &str) -> HeaderValue {
     let val = format!("{}:{}", username, password);
-    let mut header = format!("Basic {}", base64::encode(&val))
-        .parse::<HeaderValue>()
-        .expect("base64 is always valid HeaderValue");
+    let mut header = format!(
+        "Basic {}",
+        base64::engine::general_purpose::STANDARD.encode(&val)
+    )
+    .parse::<HeaderValue>()
+    .expect("base64 is always valid HeaderValue");
     header.set_sensitive(true);
     header
 }

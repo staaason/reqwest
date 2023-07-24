@@ -14,7 +14,7 @@
 #[cfg(feature = "__rustls")]
 use rustls::{
     client::HandshakeSignatureValid, client::ServerCertVerified, client::ServerCertVerifier,
-    internal::msgs::handshake::DigitallySignedStruct, Error as TLSError, ServerName,
+    DigitallySignedStruct, Error as TLSError, ServerName,
 };
 use std::fmt;
 
@@ -272,7 +272,7 @@ impl Identity {
     ) -> crate::Result<rustls::ClientConfig> {
         match self.inner {
             ClientCert::Pem { key, certs } => config_builder
-                .with_single_cert(certs, key)
+                .with_client_auth_cert(certs, key)
                 .map_err(crate::error::builder),
             #[cfg(feature = "native-tls")]
             ClientCert::Pkcs12(..) => Err(crate::error::builder("incompatible TLS identity type")),
