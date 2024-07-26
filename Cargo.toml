@@ -74,7 +74,7 @@ __internal_proxy_sys_no_cache = []
 base64 = "=0.21"
 http = "0.2"
 url = "=2.4"
-bytes = "=1.5"
+bytes = "=1.6.1"
 serde = "=1.0"
 serde_urlencoded = "=0.7"
 tower-service = "=0.3"
